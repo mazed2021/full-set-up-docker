@@ -16,11 +16,13 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install all dependencies
+      - name: Install dependencies
         run: npm install
+        working-directory: ./backend
 
       - name: Run tests
         run: npm test
+        working-directory: ./backend
 
       - name: Echo all tests passed
         run: echo "All tests passed"
