@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  push-to-dockerhub:
+  backend-push:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -26,9 +26,33 @@ jobs:
       - name: build and push
         uses: docker/build-push-action@v3
         with:
-         context: ./backend
+         context: .backend
          file: backend/Dockerfile
          push: true
          tags: ${{steps.meta.outputs.tags}}
 
+  frontend-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
 
+      - name: login docker hub
+        uses: docker/login-action@v3
+        with: 
+          username: ${{secrets.DOCKER_USERNAME}}
+          password: ${{secrets.DOCKER_PASSWORD}}
+
+      - name: Extract meta information
+        id: meta
+        uses: docker/metadata-action@v3
+        with: 
+          images: mazed415250/full-set-up
+
+      - name: build and push
+        uses: docker/build-push-action@v3
+        with:
+         context: .frontend
+         file: frontend/Dockerfile
+         push: true
+         tags: ${{steps.meta.outputs.tags}}
