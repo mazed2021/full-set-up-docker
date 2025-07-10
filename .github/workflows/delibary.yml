@@ -11,48 +11,37 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-      - name: login docker hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with: 
-          username: ${{secrets.DOCKER_USERNAME}}
-          password: ${{secrets.DOCKER_PASSWORD}}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Extract meta information
-        id: meta
-        uses: docker/metadata-action@v3
-        with: 
-          images: mazed415250/full-set-up
-
-      - name: build and push
+      - name: Build and Push Backend Image
         uses: docker/build-push-action@v3
         with:
-         context: ./backend
-         file: backend/Dockerfile
-         push: true
-         tags: ${{steps.meta.outputs.tags}}
+          context: ./backend
+          file: backend/Dockerfile
+          push: true
+          tags: mazed415250/full-set-up:backend
 
   frontend-push:
     runs-on: ubuntu-latest
+    needs: backend-push # optional dependency
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-      - name: login docker hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with: 
-          username: ${{secrets.DOCKER_USERNAME}}
-          password: ${{secrets.DOCKER_PASSWORD}}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Extract meta information
-        id: meta
-        uses: docker/metadata-action@v3
-        with: 
-          images: mazed415250/full-set-up
-
-      - name: build and push
+      - name: Build and Push Frontend Image
         uses: docker/build-push-action@v3
         with:
-         context: ./frontend
-         file: frontend/Dockerfile
-         push: true
-         tags: ${{steps.meta.outputs.tags}}
+          context: ./frontend
+          file: frontend/Dockerfile
+          push: true
+          tags: mazed415250/full-set-up:frontend
