@@ -22,12 +22,12 @@ jobs:
         uses: docker/metadata-action@v3
         with: 
           images: mazed415250/full-set-up
-          
+
       - name: build and push
         uses: docker/build-push-action@v3
         with:
          context: .
-         file: ./Dockerfile
+         file: ../backend/.Dockerfile
          push: true
          tags: ${{steps.meta.outputs.tags}}
 
